@@ -1,8 +1,8 @@
 #!/usr/bin/env python
 
 import scipy.stats
-#sample = scipy.stats.halflogistic(1,1).rvs(500)
-sample = [0.0749,0.0964,0.0908,0.1112,0.098,0.1371,0.0999,0.1053]
+# sample = scipy.stats.halflogistic(1,1).rvs(500)
+sample = [0.0749, 0.0964, 0.0908, 0.1112, 0.098, 0.1371, 0.0999, 0.1053]
 """cdfs = [
     "norm",            #Normal (Gaussian)
     "alpha",           #Alpha
@@ -89,11 +89,11 @@ cdfs = ["truncnorm"]
 a = 0.0
 b = 1.0
 na, nb, nloc, nscale = scipy.stats.truncnorm.fit(sample, a, b, loc=0, scale=1)
-print "Lower Bound: ",na
-print "Upper Bound: ",nb
-print "Location: ",nloc
-print "Scale: ",nscale
-R = scipy.stats.truncnorm.rvs(na, nb, loc=nloc,scale=nscale,size=100)
+print "Lower Bound: ", na
+print "Upper Bound: ", nb
+print "Location: ", nloc
+print "Scale: ", nscale
+R = scipy.stats.truncnorm.rvs(na, nb, loc=nloc, scale=nscale, size=100)
 print R
 """for cdf in cdfs:
     #fit our data set against every probability distribution
