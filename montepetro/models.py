@@ -2,7 +2,7 @@ import numpy
 
 from montepetro.region import Region
 from properties import GlobalProperty, CalculatedPropertyNoLayer
-from montepetro.generator import RandomGeneratorDics
+from montepetro.generators import RandomGeneratorDics
 from properties import ParameterClass
 
 

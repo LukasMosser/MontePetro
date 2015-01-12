@@ -1,7 +1,7 @@
 import numpy
 import matplotlib.pyplot as plot
 
-from montepetro.generator import RandomGeneratorDics
+from montepetro.generators import RandomGeneratorDics
 
 
 class Property(object):

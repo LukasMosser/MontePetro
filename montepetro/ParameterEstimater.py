@@ -2,7 +2,7 @@
 import scipy.stats
 import matplotlib.pyplot as plot
 
-from montepetro import generator
+from montepetro import generators
 
 
 def CalculateTruncatedNormalPorosityParameters():
@@ -28,7 +28,7 @@ def CalculateTruncatedNormalPorosityParameters():
         print "Location: ", nloc
         print "Scale: ", nscale
         # R = scipy.stats.truncnorm.rvs(na,nb,nloc,nscale,size=1000)
-        gen = generator.RandomGeneratorDics(666, 10000)
+        gen = generators.RandomGeneratorDics(666, 10000)
         R = gen.GetRandomValues(args)
         plot.hist(R, 50)
         plot.xlabel("Values")
