@@ -1,8 +1,10 @@
-from region import Region
-from properties import GlobalProperty,OOIP,CalculatedPropertyNoLayer
-from generator import RandomGenerator,RandomGeneratorDics
-from properties import ParameterClass
 import numpy
+
+from montepetro.region import Region
+from properties import GlobalProperty, CalculatedPropertyNoLayer
+from montepetro.generator import RandomGeneratorDics
+from properties import ParameterClass
+
 
 class Model(object):
 	def __init__(self):

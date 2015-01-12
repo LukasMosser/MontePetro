@@ -1,4 +1,3 @@
-from ParameterEstimater import CalculateTruncatedNormalPorosityParameters
 #BSCProject Configuration File for MonteCarlo Method
 Dump = True
 Model_Name = "BSCProject_LM_FS"

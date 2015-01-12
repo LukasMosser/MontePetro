@@ -1,7 +1,8 @@
 import numpy
 import matplotlib.pyplot as plot
-from generator import RandomGeneratorDics
-from scipy import stats
+
+from montepetro.generator import RandomGeneratorDics
+
 
 class Property(object):
 	def __init__(self,args,seed,N):
@@ -40,6 +41,7 @@ class GlobalProperty(object):
 		plot.ylabel("Probability")
 		plot.title(self.name)
 		plot.show()
+
 class CalculatedProperty(object):
 	def __init__(self,name,values,parentRegion):
 		self.name = name

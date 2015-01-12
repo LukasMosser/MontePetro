@@ -1,8 +1,9 @@
 #!/usr/bin/env python
-import numpy
 import scipy.stats
 import matplotlib.pyplot as plot
-import generator
+
+from montepetro import generator
+
 
 def CalculateTruncatedNormalPorosityParameters():
     sample4 = [0.0749,0.0964,0.0908,0.1112,0.098,0.1371,0.0999,0.1053] #Grainstone

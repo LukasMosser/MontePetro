@@ -1,7 +1,8 @@
-from properties import Property, CalculatedProperty,OOIP
 import matplotlib.pyplot as plot
-import math as m
 import numpy
+
+from montepetro.properties import Property, CalculatedProperty,OOIP
+
 
 class Region(object):
 	def __init__(self):

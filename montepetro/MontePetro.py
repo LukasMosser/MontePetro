@@ -1,11 +1,11 @@
 #!/usr/bin/python
-import sys, getopt
-from models import Model
-from generator import RandomGeneratorDics
-from properties import Property,ParameterClass,OOIP
+import sys
+import getopt
 import string
 import random
-from region import Region
+
+from montepetro.models import Model
+
 
 def main(argv):
 	inputfile = ''
