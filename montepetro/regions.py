@@ -1,13 +1,10 @@
 import matplotlib.pyplot as plot
-import numpy
+import numpy as np
 
-from montepetro.properties import Property, CalculatedProperty, OOIP
+from montepetro.properties import Property, RandomProperty, NumericalProperty, OriginalOilInPlace
 
 
 class Region(object):
-    def __init__(self):
-        pass
-
     def __init__(self, parent, name, parameter_class):
         self.model = parent
         self.region_name = name

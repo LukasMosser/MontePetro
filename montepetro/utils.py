@@ -5,6 +5,9 @@ import matplotlib.pyplot as plot
 
 from montepetro.generators import RandomGenerator
 
+def constant(c):
+    return c
+
 def random_number_from_truncated_normal_distribution(min=0.0, max=1.0, mean=0.5, std=1.0):
     normal = scipy.stats.norm(mean, std)
     u = np.random.uniform(low=0.0, high=1.0)

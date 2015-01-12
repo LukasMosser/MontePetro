@@ -13,6 +13,7 @@ class Property(object):
     def plot(self):
         pass
 
+
 class RandomProperty(Property):
     def __init__(self, seed=None, n=None, random_number_function=None, *args, **kwargs):
         Property.__init__(self, *args, **kwargs)
@@ -31,6 +32,7 @@ class RandomProperty(Property):
         plot.ylabel("Probability")
         plot.title(self.name)
         plot.show()
+
 
 class NumericalProperty(Property):
     def __init__(self, numerical_function=None, *args, **kwargs):
@@ -51,15 +53,19 @@ class NumericalProperty(Property):
         plot.title(self.name)
         plot.show()
 
-class OOIP(object):
-    def __init__(self, layer):
-        self.area = layer.properties['Area']()
-        self.poro = layer.properties['Porosity']()
-        self.sw = layer.properties['Sw']()
-        self.values = []
-        for i in range(len(self.area)):
-            self.values.append(self.area[i] * self.poro[i] * (1 - self.sw[i]))
-        self.ooip = CalculatedProperty('OOIP', self.values, layer)
 
-    def __call__(self):
-        return self.ooip
+class OriginalOilInPlace(NumericalProperty):
+    def __init__(self):
+        NumericalProperty.__init__(name="OOIP", desc="Original Oil in Place Property")
+        self.numerical_function = self.original_oil_in_place
+
+    def original_oil_in_place(self, *args, **kwargs):
+        area = kwargs['regions'].properties['area']
+        phi = kwargs['regions'].properties['porosity']
+        sw = kwargs['regions'].properties['sw']
+        result = []
+
+        for i in range(len(area)):
+            result.append(area[i]*phi[i]*(1-sw[i]))
+
+        return np.array(result)

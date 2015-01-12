@@ -2,9 +2,10 @@ __author__ = 'lmosser'
 import unittest
 import numpy as np
 
-from test_utils import mock_random
+from test_utils import mock_random, mock_numerical_function
 from montepetro.generators import RandomGenerator
 from montepetro.properties import Property, NumericalProperty, RandomProperty
+from montepetro.json_parser import JSONParser
 
 class RandomGeneratorTests(unittest.TestCase):
     def setUp(self):
@@ -56,7 +57,12 @@ class TestProperty(unittest.TestCase):
         self.assertEquals(prop.name, self.name)
         self.assertEquals(prop.desc, self.desc)
 
-        random_prop = RandomProperty(seed=666,n=10, random_number_function=np.random.uniform)
+        random_prop = RandomProperty(seed=666,
+                                     n=10,
+                                     random_number_function=np.random.uniform,
+                                     name="Random Property",
+                                     desc="Test the random property")
+
         random_prop.generate_values(low=self.min, high=self.max)
         random_prop_values = list(random_prop.values)
 
@@ -67,6 +73,41 @@ class TestProperty(unittest.TestCase):
 
         random_prop.calculate_property_statistics()
         self.assertAlmostEqual(random_prop.mean, np.mean(mock_random_values))
+
+        numerical_prop = NumericalProperty(numerical_function=mock_numerical_function,
+                                           name="Numerical Property",
+                                           desc="A numerical property")
+
+        numerical_prop.generate_values()
+        self.assertEquals(numerical_prop.values, 1.0)
+
+        numerical_prop.calculate_property_statistics()
+        self.assertEquals(numerical_prop.mean, 1.0)
+
+
+    def tearDown(self):
+        pass
+
+class TestJSONConfigLoader(unittest.TestCase):
+    def setUp(self):
+        self.file_name = "test_config.json"
+        self.bad_file_name = "test_config_bad.json"
+
+    def test_json_loader(self):
+        json = JSONParser(self.file_name)
+        json_bad = JSONParser(self.bad_file_name)
+
+        self.assertTrue(json.validate_json())
+        self.assertFalse(json_bad.validate_json())
+
+        self.assertEquals(json.data["Name"], "Test Run")
+        self.assertEquals(json.data["Version"], "0.01")
+        self.assertEquals(json.data["Author"], "LukasMosser")
+
+        self.assertEquals(len(json.data["Regions"]), 1)
+        json_regions = [region for region in json.data["Regions"]]
+
+        self.assertEquals(len(json_regions), 1)
 
     def tearDown(self):
         pass
