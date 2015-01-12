@@ -1,6 +1,6 @@
 import numpy
 
-from montepetro.region import Region
+from montepetro.regions import Region
 from properties import GlobalProperty, CalculatedPropertyNoLayer
 from montepetro.generators import RandomGeneratorDics
 from properties import ParameterClass

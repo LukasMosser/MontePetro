@@ -2,11 +2,11 @@ import numpy as np
 
 
 class RandomGenerator(object):
-    def __init__(self, seed, n):
+    def __init__(self, seed, n, random_number_function):
         self.seed = seed
         self.set_seed()
         self.N = n
-        self.random_number_function = None
+        self.random_number_function = random_number_function
 
     def set_seed(self):
         np.random.seed(self.seed)
