@@ -10,6 +10,9 @@ class Property(object):
         self.desc = desc
         self.values = None
 
+    def generate_values(self):
+        pass
+
     def plot(self):
         pass
 

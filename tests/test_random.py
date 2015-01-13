@@ -4,7 +4,7 @@ import os
 
 import numpy as np
 
-from tests.test_utils import mock_random, mock_numerical_function
+from tests.test_utils import mock_random, mock_numerical_function, MockProperty
 from montepetro.generators import RandomGenerator
 from montepetro.properties import Property, NumericalProperty, RandomProperty
 from montepetro.json_parser import JSONParser
@@ -140,7 +140,13 @@ class TestRegions(unittest.TestCase):
         self.assertEqual(child.parent, parent_b)
 
     def test_region_properties(self):
-        pass
+        region = Region(parent=None, name="Test Region")
+        property = MockProperty()
+
+        region.add_property(property)
+
+        self.assertEqual(len(region.properties), 1)
+        self.assertRaises(KeyError, region.add_property(property))
 
     def tearDown(self):
         pass
