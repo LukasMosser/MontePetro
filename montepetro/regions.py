@@ -1,5 +1,6 @@
 import matplotlib.pyplot as plot
 import numpy as np
+import logging
 
 
 class Region(object):
@@ -8,17 +9,14 @@ class Region(object):
         self.name = name
         self.properties = {}
 
-    def add_property(self, property):
-        try:
-            self.properties[property.name] = property
-        except KeyError:
-            pass
+    def add_property(self, prop):
+        if self.properties.has_key(prop.name):
+            logging.log(logging.ERROR, "Encountered duplicate property"+str(prop.name)+" in region "+str(self.name)+".")
+            raise KeyError
+        else:
+            self.properties[prop.name] = prop
 
     def __str__(self):
-        print "-------------------------------------------------------------------------"
-        print "Region Name: ", self.region_name
-        print "Properties:"
-        for property in self.properties:
-            print "\tName: ", self.properties[property].name, "\n\tProbability Distribution Function: ", \
-                self.properties[property].distribution, "\n\tMean of Samples: ", self.properties[
-                property].mean, "\n\tMode of Samples: ", self.properties[property].mode
+        str = ""
+        str += "Region Name: "+self.name
+        return str

@@ -4,14 +4,18 @@ import os
 
 import numpy as np
 
-from tests.test_utils import mock_random, mock_numerical_function, MockProperty
+from tests.test_utils import mock_random, mock_numerical_function, MockRegion, MockRandomProperty
+from tests.test_utils import MockProperty, mock_random_seed_function, MockSeedGenerator
+
 from montepetro.generators import RandomGenerator
 from montepetro.properties import Property, NumericalProperty, RandomProperty
 from montepetro.json_parser import JSONParser
 from montepetro.regions import Region
+from montepetro.seed_generators import SeedGenerator
+from montepetro.models import Model
 
 
-class RandomGeneratorTests(unittest.TestCase):
+class TestRandomGenerators(unittest.TestCase):
     def setUp(self):
         self.N = 10
         self.seed = 666
@@ -61,7 +65,11 @@ class TestProperty(unittest.TestCase):
         self.assertEquals(prop.name, self.name)
         self.assertEquals(prop.desc, self.desc)
 
-        random_prop = RandomProperty(seed=666,
+        self.assertEqual(prop.generate_values(), None)
+        self.assertEqual(prop.update_seed(), None)
+
+        mock_seed_generator = MockSeedGenerator(self.seed)
+        random_prop = RandomProperty(mock_seed_generator,
                                      n=10,
                                      random_number_function=np.random.uniform,
                                      name="Random Property",
@@ -144,9 +152,78 @@ class TestRegions(unittest.TestCase):
         property = MockProperty()
 
         region.add_property(property)
-
         self.assertEqual(len(region.properties), 1)
-        self.assertRaises(KeyError, region.add_property(property))
+        self.assertRaises(KeyError, region.add_property, property)
+
+    def test_region_output(self):
+        region = Region(parent=None, name="Test Region")
+        self.assertEqual(region.__str__(), "Region Name: Test Region")
+
+    def tearDown(self):
+        pass
+
+class TestSeedGenerator(unittest.TestCase):
+    def setUp(self):
+        self.seed = 300
+
+    def test_seed_generator(self):
+        #This fails here: seed_generator_a = SeedGenerator(self.seed)
+        np.random.seed(self.seed)
+        seed1 = np.random.randint(low=1, high=10000000)
+        seed2 = np.random.randint(low=1, high=10000000)
+
+
+        #And works only here:
+        seed_generator_a = SeedGenerator(self.seed)
+        seed_generator_a.seed_random_function = mock_random_seed_function
+
+        print seed_generator_a.request_seed()
+        print seed_generator_a.seeds
+        self.assertRaises(ValueError, seed_generator_a.request_seed)
+
+        seed_generator_a = SeedGenerator(self.seed)
+        self.assertEqual(seed_generator_a.request_seed(), seed1)
+        self.assertEqual(seed_generator_a.request_seed(), seed2)
+
+        #Therefore SeedGenerator instance will need to be hard coded into the Model class
+
+    def tearDown(self):
+        pass
+
+class TestModel(unittest.TestCase):
+    def setUp(self):
+        self.name = "Test Model"
+        self.seed = 300
+
+    def test_model(self):
+        model = Model(self.name, self.seed)
+        self.assertEqual(model.seed, self.seed)
+
+        model.seed_generator = MockSeedGenerator(self.seed)
+        self.assertEqual(model.name, self.name)
+        self.assertEqual(model.seed, self.seed)
+
+        mock_region = MockRegion()
+        mock_property = MockProperty()
+
+        model.add_property(mock_property)
+        self.assertEquals(len(model.properties), 1)
+        self.assertRaises(KeyError, model.add_property, mock_property)
+
+        mock_random_property = MockRandomProperty(MockSeedGenerator(self.seed-1))
+        mock_random_property.name = "MockRandomProperty"
+
+        #assigning the property should reset the seed using the models seed generator
+        model.add_property(mock_random_property)
+
+        self.assertEqual(model.properties[mock_random_property.name].seed, self.seed)
+        self.assertEqual(len(model.properties), 2)
+
+        model.add_region(mock_region)
+        self.assertEquals(len(model.regions), 1)
+        self.assertRaises(KeyError, model.add_region, mock_region)
+
+
 
     def tearDown(self):
         pass

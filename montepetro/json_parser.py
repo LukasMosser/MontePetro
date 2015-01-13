@@ -1,5 +1,6 @@
 __author__ = 'lmosser'
 import json
+import logging
 
 class JSONParser(object):
     def __init__(self, file_name):
@@ -14,43 +15,36 @@ class JSONParser(object):
         try:
             name = self.data["Name"]
         except KeyError:
-            if verbose:
-                print "No attribute Name in configuration file."
+            logging.log(logging.WARNING,"No attribute Name in configuration file.")
             valid = False
 
         try:
             version = self.data["Version"]
         except KeyError:
-            if verbose:
-                print "No attribute Version in configuration file."
+            logging.log(logging.WARNING,"No attribute Version in configuration file.")
             valid = False
         try:
             author = self.data["Author"]
         except KeyError:
-            if verbose:
-                print "No attribute Author in configuration file."
+            logging.log(logging.WARNING,"No attribute Author in configuration file.")
             valid = False
 
         try:
             regions = self.data["Regions"]
             if len(regions) is 0:
                 valid = False
-                if verbose:
-                    print "No Regions defined."
+                logging.log(logging.WARNING,"No Regions defined.")
         except KeyError:
-            if verbose:
-                print "No attribute Regions in configuration file."
+            logging.log(logging.WARNING,"No attribute Regions in configuration file.")
             valid = False
 
         try:
             properties = self.data["Properties"]
             if len(properties) is 0:
                 valid = False
-                if verbose:
-                    print "No Properties defined."
+                logging.log(logging.WARNING,"No Properties defined.")
         except KeyError:
-            if verbose:
-                print "No attribute Properties in configuration file."
+            print "No attribute Properties in configuration file."
             valid = False
 
         try:
@@ -62,7 +56,6 @@ class JSONParser(object):
                         valid = False
                         raise KeyError
         except KeyError:
-            if verbose:
-                print "Property in region not defined in Properties section."
+            logging.log(logging.WARNING,"Property in region not defined in Properties section.")
 
         return valid
