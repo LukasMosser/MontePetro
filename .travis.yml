@@ -16,14 +16,14 @@ before_install:
   - sudo ln -s /run/shm /dev/shm
 # Install packages
 install:
-  - conda install --yes python=$TRAVIS_PYTHON_VERSION numpy scipy matplotlib nose
+  - conda install --yes python=$TRAVIS_PYTHON_VERSION numpy coverage nose scipy matplotlib nose
   # Coverage packages are on my binstar channel
   - conda install --yes -c dan_blanchard python-coveralls nose-cov
   # - python setup.py install
  
 # Run test
 script:
-  - nosetests --with-cov --cov montepetro --cov-config .coveragerc --logging-level=INFO
+  nosetests --with-coverage --cover-package=montepetro
  
 # Calculate coverage
 after_success:
