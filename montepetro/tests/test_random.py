@@ -1,6 +1,7 @@
 __author__ = 'lmosser'
 import unittest
 import numpy as np
+import os
 
 from test_utils import mock_random, mock_numerical_function
 from montepetro.generators import RandomGenerator
@@ -92,6 +93,8 @@ class TestJSONConfigLoader(unittest.TestCase):
     def setUp(self):
         self.file_name = "test_config.json"
         self.bad_file_name = "test_config_bad.json"
+        self.cwd = os.getcwd()
+        os.chdir(self.cwd+"/tests/test_data/")
 
     def test_json_loader(self):
         json = JSONParser(self.file_name)
@@ -110,4 +113,4 @@ class TestJSONConfigLoader(unittest.TestCase):
         self.assertEquals(len(json_regions), 1)
 
     def tearDown(self):
-        pass
+        os.chdir(self.cwd)
