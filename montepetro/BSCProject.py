@@ -6,7 +6,7 @@ Seed = 66323
 
 # Property_Descriptors = {'Property 1':{'Name':"Porosity",'Distribution':"Normal"},'Property 2':{'Name':"Sw",'Distribution':"Triangular"},'Property 3':{'Name':"Area",'Distribution':"Constant"}}
 # not enough data for packstone, coarse sand, fine sand and medium sand => std.dev 0.05, marl=largest uncertainty => std.dev 0.1
-trunc_norm = {'grainstone': {'a': 0.0009, 'b': 0.4817, 'loc': 0.1017, 'scale': 0.0118},
+trunc_norm = {'grainstone': {'a': 0.00090, 'b': 0.4817, 'loc': 0.1017, 'scale': 0.0118},
               'wackstone': {'a': 0.0009, 'b': 0.4812, 'loc': 0.0929, 'scale': 0.0108},
               'mudstone': {'a': 0.0013, 'b': 0.4797, 'loc': 0.0598, 'scale': 0.0062},
               'packstone': {'a': 0.0, 'b': 0.475, 'loc': 0.0394, 'scale': 0.05},
