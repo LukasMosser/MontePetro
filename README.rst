@@ -6,4 +6,4 @@ MontePetro - Probabilistic Reserves in Python
 .. image:: https://coveralls.io/repos/z4r/python-coveralls/badge.png?branch=master
     :target: https://coveralls.io/r/LukasMosser/MontePetro
 
-Coming soon..
+Coming soon...
