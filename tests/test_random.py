@@ -8,6 +8,7 @@ from tests.test_utils import mock_random, mock_numerical_function
 from montepetro.generators import RandomGenerator
 from montepetro.properties import Property, NumericalProperty, RandomProperty
 from montepetro.json_parser import JSONParser
+from montepetro.regions import Region
 
 
 class RandomGeneratorTests(unittest.TestCase):
@@ -118,3 +119,28 @@ class TestJSONConfigLoader(unittest.TestCase):
 
     def tearDown(self):
         os.chdir(self.cwd)
+
+
+class TestRegions(unittest.TestCase):
+    def setUp(self):
+        pass
+
+    def test_region(self):
+        #Test Basic Functionality
+        parent_a = Region(parent=None, name="Test Region")
+        self.assertEquals(parent_a.name, "Test Region")
+        self.assertEquals(parent_a.parent, None)
+
+        child = Region(parent=parent_a, name="Child Region")
+        self.assertEquals(child.parent, parent_a)
+
+        parent_b = Region(parent=None, name="Test Region B")
+        child.parent = parent_b
+        self.assertNotEqual(child.parent, parent_a)
+        self.assertEqual(child.parent, parent_b)
+
+    def test_region_properties(self):
+        pass
+
+    def tearDown(self):
+        pass
