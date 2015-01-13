@@ -15,6 +15,11 @@ class Model(object):
             logging.log(logging.ERROR, "Encountered duplicate region"+str(region.name)+" in Model "+self.name+".")
             raise KeyError
         else:
+            for key in region.properties.keys():
+                #update the regional property seed
+                region.properties[key].update_seed(self.seed_generator)
+                #delete any values
+                region.properties[key].values = None
             self.regions[region.name] = region
 
     def add_property(self, prop):

@@ -203,14 +203,13 @@ class TestModel(unittest.TestCase):
         self.assertEqual(model.name, self.name)
         self.assertEqual(model.seed, self.seed)
 
-        mock_region = MockRegion()
         mock_property = MockProperty()
 
         model.add_property(mock_property)
         self.assertEquals(len(model.properties), 1)
         self.assertRaises(KeyError, model.add_property, mock_property)
 
-        mock_random_property = MockRandomProperty(MockSeedGenerator(self.seed-1))
+        mock_random_property = MockRandomProperty(MockSeedGenerator(self.seed-1), name="MockRandomProperty")
         mock_random_property.name = "MockRandomProperty"
 
         #assigning the property should reset the seed using the models seed generator
@@ -219,10 +218,12 @@ class TestModel(unittest.TestCase):
         self.assertEqual(model.properties[mock_random_property.name].seed, self.seed)
         self.assertEqual(len(model.properties), 2)
 
+        mock_region = MockRegion(name="MockRegion")
+        mock_region.add_property(MockRandomProperty(MockSeedGenerator(self.seed-1), name="RegionRandomMockProperty"))
         model.add_region(mock_region)
         self.assertEquals(len(model.regions), 1)
+        self.assertEqual(model.regions[mock_region.name].properties["RegionRandomMockProperty"].seed, self.seed)
         self.assertRaises(KeyError, model.add_region, mock_region)
-
 
 
     def tearDown(self):

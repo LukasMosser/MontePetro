@@ -2,6 +2,7 @@ import numpy as np
 
 from montepetro.generators import RandomGenerator
 
+
 class Property(object):
     def __init__(self,  name=None, desc=None):
         self.name = name
@@ -57,9 +58,7 @@ class OriginalOilInPlace(NumericalProperty):
         area = kwargs['regions'].properties['area']
         phi = kwargs['regions'].properties['porosity']
         sw = kwargs['regions'].properties['sw']
-
         result = []
         for i in range(len(area)):
             result.append(area[i]*phi[i]*(1-sw[i]))
-
         return np.array(result)

@@ -28,9 +28,9 @@ class MockProperty(Property):
         return True
 
 class MockRandomProperty(RandomProperty):
-    def __init__(self, seed_generator):
-        RandomProperty.__init__(self, seed_generator, name="MockProperty", desc="A Mock Property")
+    def __init__(self, seed_generator, *args, **kwargs):
+        RandomProperty.__init__(self, seed_generator, *args, **kwargs)
 
 class MockRegion(Region):
-    def __init__(self):
-        Region.__init__(self, parent=None,name="MockRegion")
+    def __init__(self, *args, **kwargs):
+        Region.__init__(self, *args, **kwargs)
