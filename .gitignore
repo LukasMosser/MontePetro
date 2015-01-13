@@ -9,6 +9,7 @@ __pycache__/
 *.so
 
 # Distribution / packaging
+sample_data/
 bin/
 build/
 develop-eggs/

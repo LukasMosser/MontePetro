@@ -53,4 +53,16 @@ class JSONParser(object):
                 print "No attribute Properties in configuration file."
             valid = False
 
+        try:
+            regions = self.data["Regions"]
+            for region in regions:
+                properties = regions["Properties"]
+                for prop in properties:
+                    if prop not in self.data["Properties"]:
+                        valid = False
+                        raise KeyError
+        except KeyError:
+            if verbose:
+                print "Property in region not defined in Properties section."
+
         return valid

@@ -114,5 +114,7 @@ class TestJSONConfigLoader(unittest.TestCase):
 
         self.assertEquals(len(json_regions), 1)
 
+        self.assertEquals(len(json.data["Properties"]), 1)
+
     def tearDown(self):
         os.chdir(self.cwd)
