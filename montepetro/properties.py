@@ -44,20 +44,3 @@ class NumericalProperty(Property):
 
     def calculate_property_statistics(self):
         self.mean = np.mean(self.values)
-
-
-class OriginalOilInPlace(NumericalProperty):
-    def __init__(self):
-        NumericalProperty.__init__(self, name="OOIP",
-                                   desc="Original Oil in Place Property",
-                                   numerical_function=self.original_oil_in_place())
-        self.numerical_function = self.original_oil_in_place
-
-    def original_oil_in_place(self,**kwargs):
-        area = kwargs['regions'].properties['area']
-        phi = kwargs['regions'].properties['porosity']
-        sw = kwargs['regions'].properties['sw']
-        result = []
-        for i in range(len(area)):
-            result.append(area[i]*phi[i]*(1-sw[i]))
-        return np.array(result)
