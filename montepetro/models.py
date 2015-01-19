@@ -33,7 +33,8 @@ class Model(object):
     def add_defined_properties_to_regions(self):
         for region_name, region in self.regions.iteritems():
             for property_name, property in self.properties.iteritems():
-                region.add_property(property)
+                if property_name not in region.properties.keys():
+                    region.add_property(property)
 
     def run(self, config):
         for region_name, region in self.regions.iteritems():
@@ -41,6 +42,3 @@ class Model(object):
             for property_name, property in region.properties.iteritems():
                 regional_property_config = region_config[property_name]
                 property.generate_values(**regional_property_config)
-
-    def dump(self):
-        pass

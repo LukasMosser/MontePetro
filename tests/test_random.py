@@ -190,10 +190,11 @@ class TestSeedGenerator(unittest.TestCase):
     def tearDown(self):
         pass
 
+
 class TestModel(unittest.TestCase):
     def setUp(self):
         self.name = "Test Model"
-        self.seed = 300
+        self.seed = 200
 
     def test_model(self):
         model = Model(self.name, self.seed)
@@ -225,6 +226,31 @@ class TestModel(unittest.TestCase):
         self.assertEqual(model.regions[mock_region.name].properties["RegionRandomMockProperty"].seed, self.seed)
         self.assertRaises(KeyError, model.add_region, mock_region)
 
+        #Test filling a model
+        #Reinitialize model to get a clean slate
+        model = Model(self.name, self.seed)
+        mock_random_property_a = MockRandomProperty(MockSeedGenerator(self.seed), name="MockRandomProperty")
+        mock_region_a = MockRegion(name="MockRegion")
+
+        model.add_region(mock_region_a)
+        model.add_property(mock_random_property_a)
+
+        model.add_defined_properties_to_regions()
+        for key, region in model.regions.iteritems():
+            self.assertEqual(len(region.properties), 1)
+
+        mock_random_property_b = MockRandomProperty(MockSeedGenerator(self.seed-1), name="MockRandomPropertyB")
+        model.add_property(mock_random_property_b)
+
+        for region_name, region in model.regions.iteritems():
+            self.assertEqual(len(region.properties), 1)
+
+        mock_region_b = MockRegion(name="MockRegionB")
+
+        model.add_region(mock_region_b)
+        model.add_defined_properties_to_regions()
+        for region_name, region in model.regions.iteritems():
+            self.assertEqual(len(region.properties), 2)
 
     def tearDown(self):
         pass
