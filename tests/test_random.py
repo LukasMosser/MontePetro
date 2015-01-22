@@ -35,8 +35,8 @@ class TestRandomGenerators(unittest.TestCase):
         self.assertAlmostEqual(gen.get_random_number(low=0.0, high=1.0), np.array(0.7004371218578347), places=5)
         # How to test get N random numbers?
 
-class TestRegions(unittest.TestCase):
 
+class TestRegions(unittest.TestCase):
     def setUp(self):
         pass
 
@@ -45,6 +45,7 @@ class TestRegions(unittest.TestCase):
 
     def tearDown(self):
         pass
+
 
 class TestProperty(unittest.TestCase):
     def setUp(self):
@@ -78,7 +79,7 @@ class TestProperty(unittest.TestCase):
         random_prop.generate_values(low=self.min, high=self.max)
         random_prop_values = list(random_prop.values)
 
-        #reset the mock generator
+        # reset the mock generator
         self.mock_generator.set_seed()
         mock_random_values = list(self.mock_generator.get_n_random_numbers(low=self.min, high=self.max))
         self.assertEquals(random_prop_values, mock_random_values)
@@ -96,16 +97,16 @@ class TestProperty(unittest.TestCase):
         numerical_prop.calculate_property_statistics()
         self.assertEquals(numerical_prop.mean, 1.0)
 
-
     def tearDown(self):
         pass
+
 
 class TestJSONConfigLoader(unittest.TestCase):
     def setUp(self):
         self.file_name = "test_config.json"
         self.bad_file_name = "test_config_bad.json"
         self.cwd = os.getcwd()
-        os.chdir(self.cwd+"/tests/test_data/")
+        os.chdir(self.cwd + "/tests/test_data/")
 
     def test_json_loader(self):
         json = JSONParser(self.file_name)
@@ -134,7 +135,7 @@ class TestRegions(unittest.TestCase):
         pass
 
     def test_region(self):
-        #Test Basic Functionality
+        # Test Basic Functionality
         parent_a = Region(parent=None, name="Test Region")
         self.assertEquals(parent_a.name, "Test Region")
         self.assertEquals(parent_a.parent, None)
@@ -162,18 +163,18 @@ class TestRegions(unittest.TestCase):
     def tearDown(self):
         pass
 
+
 class TestSeedGenerator(unittest.TestCase):
     def setUp(self):
         self.seed = 300
 
     def test_seed_generator(self):
-        #This fails here: seed_generator_a = SeedGenerator(self.seed)
+        # This fails here: seed_generator_a = SeedGenerator(self.seed)
         np.random.seed(self.seed)
         seed1 = np.random.randint(low=1, high=10000000)
         seed2 = np.random.randint(low=1, high=10000000)
 
-
-        #And works only here:
+        # And works only here:
         seed_generator_a = SeedGenerator(self.seed)
         seed_generator_a.seed_random_function = mock_random_seed_function
 
@@ -185,7 +186,7 @@ class TestSeedGenerator(unittest.TestCase):
         self.assertEqual(seed_generator_a.request_seed(), seed1)
         self.assertEqual(seed_generator_a.request_seed(), seed2)
 
-        #Therefore SeedGenerator instance will need to be hard coded into the Model class
+        # Therefore SeedGenerator instance will need to be hard coded into the Model class
 
     def tearDown(self):
         pass
@@ -210,24 +211,24 @@ class TestModel(unittest.TestCase):
         self.assertEquals(len(model.properties), 1)
         self.assertRaises(KeyError, model.add_property, mock_property)
 
-        mock_random_property = MockRandomProperty(MockSeedGenerator(self.seed-1), name="MockRandomProperty")
+        mock_random_property = MockRandomProperty(MockSeedGenerator(self.seed - 1), name="MockRandomProperty")
         mock_random_property.name = "MockRandomProperty"
 
-        #assigning the property should reset the seed using the models seed generator
+        # assigning the property should reset the seed using the models seed generator
         model.add_property(mock_random_property)
 
         self.assertEqual(model.properties[mock_random_property.name].seed, self.seed)
         self.assertEqual(len(model.properties), 2)
 
         mock_region = MockRegion(name="MockRegion")
-        mock_region.add_property(MockRandomProperty(MockSeedGenerator(self.seed-1), name="RegionRandomMockProperty"))
+        mock_region.add_property(MockRandomProperty(MockSeedGenerator(self.seed - 1), name="RegionRandomMockProperty"))
         model.add_region(mock_region)
         self.assertEquals(len(model.regions), 1)
         self.assertEqual(model.regions[mock_region.name].properties["RegionRandomMockProperty"].seed, self.seed)
         self.assertRaises(KeyError, model.add_region, mock_region)
 
-        #Test filling a model
-        #Reinitialize model to get a clean slate
+        # Test filling a model
+        # Reinitialize model to get a clean slate
         model = Model(self.name, self.seed)
         mock_random_property_a = MockRandomProperty(MockSeedGenerator(self.seed), name="MockRandomProperty")
         mock_region_a = MockRegion(name="MockRegion")
@@ -239,7 +240,7 @@ class TestModel(unittest.TestCase):
         for key, region in model.regions.iteritems():
             self.assertEqual(len(region.properties), 1)
 
-        mock_random_property_b = MockRandomProperty(MockSeedGenerator(self.seed-1), name="MockRandomPropertyB")
+        mock_random_property_b = MockRandomProperty(MockSeedGenerator(self.seed - 1), name="MockRandomPropertyB")
         model.add_property(mock_random_property_b)
 
         for region_name, region in model.regions.iteritems():
@@ -251,6 +252,25 @@ class TestModel(unittest.TestCase):
         model.add_defined_properties_to_regions()
         for region_name, region in model.regions.iteritems():
             self.assertEqual(len(region.properties), 2)
+
+        #Test runnning a model from a configuration dictionary
+        config = {"MockRegionA": {"MockRandomPropertyA": {"low": 100.0, "high": 1000.0},
+                           "MockRandomPropertyB": {"low": 100.0, "high": 1000.0}}
+                 }
+
+        n = 10
+        model = Model(self.name, self.seed)
+        mock_random_property_a = MockRandomProperty(MockSeedGenerator(self.seed), name="MockRandomPropertyA", n=n, random_number_function=np.random.uniform)
+        mock_random_property_b = MockRandomProperty(MockSeedGenerator(self.seed), name="MockRandomPropertyB", n=n, random_number_function=np.random.uniform)
+        mock_region_a = MockRegion(name="MockRegionA")
+        model.add_property(mock_random_property_a)
+        model.add_property(mock_random_property_b)
+        model.add_region(mock_region_a)
+        model.run(config)
+
+        for region_name, region in model.regions.iteritems():
+            for property_name, property in region.properties.iteritems():
+                self.assertEqual(len(property.values), 10)
 
     def tearDown(self):
         pass

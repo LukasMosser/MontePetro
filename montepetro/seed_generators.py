@@ -1,6 +1,7 @@
 import numpy as np
 import logging
 
+
 class SeedGenerator(object):
     def __init__(self, seed):
         self.seed = seed
