@@ -8,7 +8,7 @@ from tests.test_utils import mock_random, mock_numerical_function, MockRegion, M
 from tests.test_utils import MockProperty, mock_random_seed_function, MockSeedGenerator
 
 from montepetro.generators import RandomGenerator
-from montepetro.properties import Property, NumericalProperty, RandomProperty
+from montepetro.properties import Property, RandomProperty, RegionalProperty
 from montepetro.json_parser import JSONParser
 from montepetro.regions import Region
 from montepetro.seed_generators import SeedGenerator
@@ -87,15 +87,8 @@ class TestProperty(unittest.TestCase):
         random_prop.calculate_property_statistics()
         self.assertAlmostEqual(random_prop.mean, np.mean(mock_random_values))
 
-        numerical_prop = NumericalProperty(numerical_function=mock_numerical_function,
-                                           name="Numerical Property",
-                                           desc="A numerical property")
-
-        numerical_prop.generate_values()
-        self.assertEquals(numerical_prop.values, 1.0)
-
-        numerical_prop.calculate_property_statistics()
-        self.assertEquals(numerical_prop.mean, 1.0)
+        regional_property = RegionalProperty(MockRegion(name="MockRegion"))
+        self.assertEqual(regional_property.region.name, "MockRegion")
 
     def tearDown(self):
         pass
@@ -226,6 +219,11 @@ class TestModel(unittest.TestCase):
         self.assertEquals(len(model.regions), 1)
         self.assertEqual(model.regions[mock_region.name].properties["RegionRandomMockProperty"].seed, self.seed)
         self.assertRaises(KeyError, model.add_region, mock_region)
+
+        #Test Regional Property Addition
+        model.add_regional_property("MockRegionalProperty", RegionalProperty)
+        for region_name, region in model.regions.iteritems():
+            self.assertEqual(len(region.properties), 2)
 
         # Test filling a model
         # Reinitialize model to get a clean slate

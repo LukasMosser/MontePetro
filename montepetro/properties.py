@@ -33,14 +33,7 @@ class RandomProperty(Property):
         self.mean = np.mean(self.values)
 
 
-class NumericalProperty(Property):
-    def __init__(self, numerical_function=None, *args, **kwargs):
+class RegionalProperty(Property):
+    def __init__(self, region, *args, **kwargs):
         Property.__init__(self, *args, **kwargs)
-        self.numerical_function = numerical_function
-        self.mean = None
-
-    def generate_values(self, *args, **kwargs):
-        self.values = self.numerical_function(*args, **kwargs)
-
-    def calculate_property_statistics(self):
-        self.mean = np.mean(self.values)
+        self.region = region

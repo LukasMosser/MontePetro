@@ -38,6 +38,11 @@ class Model(object):
                 if property_name not in region.properties.keys():
                     region.add_property(property)
 
+    def add_regional_property(self, prop_name, prop):
+        for region_name, region in self.regions.iteritems():
+            region.properties[prop_name] = prop(region)
+            region.properties[prop_name].generate_values()
+
     def run(self, config):
         for region_name, region in self.regions.iteritems():
             region_config = config[region_name]
