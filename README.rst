@@ -8,10 +8,11 @@ Probabilistic Reserve Estimation in Python
 .. image:: https://coveralls.io/repos/LukasMosser/MontePetro/badge.png?branch=master
     :target: https://coveralls.io/r/LukasMosser/MontePetro?branch=master
 
-This package provides a library to perform basic monte carlo reserve estimation
-from petrophysical data in native python.
-The library is mainly intended as an educational resource, but can be applied to a variety
-of other monte carlo method applications
+This package provides a library to perform basic monte carlo estimation of property distributions in native python.
+The package was originaly intended to estimate oil and gas reserves in multi-regional domains
+from petrophysical datasets, but can be applied to a variety of problems such as the example problems shown here.
+
+An IPython Notebook showing the Libraries application to oil and gas reserve estimation can be found here.
 
 Installation
 ==================
@@ -59,7 +60,7 @@ RegionalProperties are properties that we want to calculate based on the defined
 For our bone example me way want to estimate the ensemble distribution of the density of the bone.
 We define a simple model for the ensemble density of the bone to be:
 
-                Density_Calcite*(1-Porosity)+Density_Bone_Fluid*Porosity
+                Ensemble_Density = Density_Calcite*(1-Porosity)+Density_Bone_Fluid*Porosity
 
 The following code goes into detail on how we create the probability distributions and add them to our model.
 
@@ -99,7 +100,7 @@ The following code goes into detail on how we create the probability distributio
     #This will generate all the sampled distributions for each region
     model.run(config)
 
-We can now perform an operation on these values by creating accessing the values directly.
+We can now perform an operation on these values by accessing the values directly.
 
 .. code-block:: python
 
