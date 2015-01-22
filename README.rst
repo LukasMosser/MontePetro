@@ -1,5 +1,7 @@
 =============================================
-MontePetro - Probabilistic Reserves in Python
+MontePetro
+=============================================
+Probabilistic Reserve Estimation in Python
 =============================================
 .. image:: https://api.travis-ci.org/z4r/python-coveralls.png?branch=master
     :target: http://travis-ci.org/LukasMosser/MontePetro
@@ -11,15 +13,16 @@ from petrophysical data in native python.
 The library is mainly intended as an educational resource, but can be applied to a variety
 of other monte carlo method applications
 
-INSTALLING THE PKG
+Installation
 ==================
 Using pip::
 
     $ pip install montepetro
 
+This will install MontePetro from the Python Package Index.
 
-BASIC USAGE
-=============
+Basic Use of the MontePetro package
+==================================
 MontePetro allows to create single and multi-region monte carlo estimates of parameter distributions.
 The basic container for all regions is provided by the model class.
 
@@ -40,6 +43,7 @@ We can perform calculations on the regions themselves or we can pass them to a m
 structure and let the model do all the hard work for us!
 
 .. code-block:: python
+
     from montepetro.regions import Region
     region_a = Region(name="Inner Bone")
     region_b = Region(name="Outer Bone")
@@ -98,6 +102,7 @@ The following code goes into detail on how we create the probability distributio
 We can now perform an operation on these values by creating accessing the values directly.
 
 .. code-block:: python
+
     for region_name, region in model.regions.iteritems():
         porosity = region.properties["Porosity"].values
         rho_calc = region.properties["Rho_Calc"].values
