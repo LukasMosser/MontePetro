@@ -36,17 +36,6 @@ class TestRandomGenerators(unittest.TestCase):
         # How to test get N random numbers?
 
 
-class TestRegions(unittest.TestCase):
-    def setUp(self):
-        pass
-
-    def test_region(self):
-        pass
-
-    def tearDown(self):
-        pass
-
-
 class TestProperty(unittest.TestCase):
     def setUp(self):
         self.name = "Test Property"
