@@ -60,9 +60,9 @@ class OriginalOilInPlace(RegionalProperty):
         return ooip
 
     def calculate_property_statistics(self):
-        self.p10 = np.percentile(self.values, 10)
+        self.p90 = np.percentile(self.values, 10)
         self.p50 = np.percentile(self.values, 50)
-        self.p90 = np.percentile(self.values, 90)
+        self.p10 = np.percentile(self.values, 90)
         self.mean = np.mean(self.values)
 
     def generate_values(self):
@@ -86,9 +86,9 @@ class ModelOriginalOilInPlace(RegionalProperty):
         return sum
 
     def calculate_property_statistics(self):
-        self.p10 = np.percentile(self.values, 10)
+        self.p90 = np.percentile(self.values, 10)
         self.p50 = np.percentile(self.values, 50)
-        self.p90 = np.percentile(self.values, 90)
+        self.p10 = np.percentile(self.values, 90)
         self.mean = np.mean(self.values)
 
     def generate_values(self):
