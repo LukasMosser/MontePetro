@@ -67,9 +67,9 @@ RegionalProperties are properties that we want to calculate based on the defined
 For our bone example me way want to estimate the ensemble distribution of the density of the bone.
 We define a simple model for the ensemble density of the bone to be:
 
-.. math::
 
-    \rho_{ensemble} \ = \ \rho_{Calcite}(1-\phi)+\rho_{bone \ fluid}\phi
+
+    ensemble_density = calcite_density*(1-porosity) + bone_fluid_density * porosity
 
 The following code goes into detail on how we create the probability distributions and add them to our model.
 
