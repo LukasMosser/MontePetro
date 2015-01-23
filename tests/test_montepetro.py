@@ -70,7 +70,7 @@ class TestProperty(unittest.TestCase):
         self.assertEqual(prop.update_seed(), None)
 
         mock_seed_generator = MockSeedGenerator(self.seed)
-        random_prop = RandomProperty(mock_seed_generator,
+        random_prop = RandomProperty(seed_generator=mock_seed_generator,
                                      n=10,
                                      random_number_function=np.random.uniform,
                                      name="Random Property",
@@ -204,7 +204,8 @@ class TestModel(unittest.TestCase):
         self.assertEquals(len(model.properties), 1)
         self.assertRaises(KeyError, model.add_property, mock_property)
 
-        mock_random_property = MockRandomProperty(MockSeedGenerator(self.seed - 1), name="MockRandomProperty")
+        mock_random_property = MockRandomProperty(seed_generator=MockSeedGenerator(self.seed - 1),
+                                                  name="MockRandomProperty")
         mock_random_property.name = "MockRandomProperty"
 
         # assigning the property should reset the seed using the models seed generator
@@ -214,7 +215,8 @@ class TestModel(unittest.TestCase):
         self.assertEqual(len(model.properties), 2)
 
         mock_region = MockRegion(name="MockRegion")
-        mock_region.add_property(MockRandomProperty(MockSeedGenerator(self.seed - 1), name="RegionRandomMockProperty"))
+        mock_region.add_property(MockRandomProperty(seed_generator=MockSeedGenerator(self.seed - 1),
+                                                    name="RegionRandomMockProperty"))
         model.add_region(mock_region)
         self.assertEquals(len(model.regions), 1)
         self.assertEqual(model.regions[mock_region.name].properties["RegionRandomMockProperty"].seed, self.seed)
@@ -228,7 +230,8 @@ class TestModel(unittest.TestCase):
         # Test filling a model
         # Reinitialize model to get a clean slate
         model = Model(self.name, self.seed)
-        mock_random_property_a = MockRandomProperty(MockSeedGenerator(self.seed), name="MockRandomProperty")
+        mock_random_property_a = MockRandomProperty(seed_generator=MockSeedGenerator(self.seed),
+                                                    name="MockRandomProperty")
         mock_region_a = MockRegion(name="MockRegion")
 
         model.add_region(mock_region_a)
@@ -238,7 +241,8 @@ class TestModel(unittest.TestCase):
         for key, region in model.regions.iteritems():
             self.assertEqual(len(region.properties), 1)
 
-        mock_random_property_b = MockRandomProperty(MockSeedGenerator(self.seed - 1), name="MockRandomPropertyB")
+        mock_random_property_b = MockRandomProperty(seed_generator=MockSeedGenerator(self.seed - 1),
+                                                    name="MockRandomPropertyB")
         model.add_property(mock_random_property_b)
 
         for region_name, region in model.regions.iteritems():
@@ -258,8 +262,12 @@ class TestModel(unittest.TestCase):
 
         n = 10
         model = Model(self.name, self.seed)
-        mock_random_property_a = MockRandomProperty(MockSeedGenerator(self.seed), name="MockRandomPropertyA", n=n, random_number_function=np.random.uniform)
-        mock_random_property_b = MockRandomProperty(MockSeedGenerator(self.seed), name="MockRandomPropertyB", n=n, random_number_function=np.random.uniform)
+        mock_random_property_a = MockRandomProperty(seed_generator=MockSeedGenerator(self.seed),
+                                                    name="MockRandomPropertyA", n=n,
+                                                    random_number_function=np.random.uniform)
+        mock_random_property_b = MockRandomProperty(seed_generator=MockSeedGenerator(self.seed),
+                                                    name="MockRandomPropertyB", n=n,
+                                                    random_number_function=np.random.uniform)
         mock_region_a = MockRegion(name="MockRegionA")
         model.add_property(mock_random_property_a)
         model.add_property(mock_random_property_b)

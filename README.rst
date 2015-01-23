@@ -22,12 +22,13 @@ Using pip::
 
 This will install MontePetro from the Python Package Index.
 
-Basic Use of the MontePetro package
+Basic use of the MontePetro package
 ==================================
 MontePetro allows to create single and multi-region monte carlo estimates of parameter distributions.
 The basic container for all regions is provided by the model class.
 
 .. code-block:: python
+
     from montepetro.models import Model
     seed = 300
     model = Model("A simple Model", seed)
@@ -60,38 +61,34 @@ RegionalProperties are properties that we want to calculate based on the defined
 For our bone example me way want to estimate the ensemble distribution of the density of the bone.
 We define a simple model for the ensemble density of the bone to be:
 
-                Ensemble_Density = Density_Calcite*(1-Porosity)+Density_Bone_Fluid*Porosity
+.. math::
+
+    \rho_{ensemble}= \rho_{Calcite}*(1-\phi)+\rho_{bone \ fluid}*\phi
 
 The following code goes into detail on how we create the probability distributions and add them to our model.
 
 .. code-block:: python
-
-    from montepetro.properties import RandomProperty
-    import numpy
-    #We need a dummy seed generator to initialize the properties, but once we add them to the model
-    #The seed of the model will govern the properties behavior.
-    s = SeedGenerator(300)
 
     #Define number of samples we want to take
     n = 10000
 
     #We pass the RandomProperty our functions from which we sample the probability distributions
     #Here we make use of the numpy libraries built in random number generators
-    porosity = RandomProperty(s, name="Porosity", n=n, random_number_function=numpy.random.uniform)
-    density_calcite = RandomProperty(s, name="Rho_Calc", n=n, random_number_function=numpy.random.uniform)
-    density_bone_fluid = RandomProperty(s, name="Rho_Fluid", n=n, random_number_function=numpy.random.triangular)
+    porosity = RandomProperty(name="Porosity", n=n, random_number_function=numpy.random.uniform)
+    density_calcite = RandomProperty(name="Rho_Calc", n=n, random_number_function=numpy.random.triangular)
+    density_bone_fluid = RandomProperty(name="Rho_Fluid", n=n, random_number_function=numpy.random.triangular)
 
     config = {"Inner Bone": {"Porosity": {"low": 0.0, "high": 0.2},
                              "Rho_Calc": {"left": 2.54, "right": 2.7, "mode": 2.58},
                              "Rho_Fluid": {"left": 1.01, "right": 1.5, "mode": 1.2}},
-              "Outer Bone": {"Porosity": {"low": 0.1, "high": 0.3},
-                           "Rho_Calc": {"left": 2.54, "right": 2.7, "mode": 2.58},
+              "Outer Bone": {"Porosity": {"low": 0.1, "high": 0.2},
+                           "Rho_Calc": {"left": 2.50, "right": 3.0, "mode": 2.8},
                            "Rho_Fluid": {"left": 1.1, "right": 1.3, "mode": 1.2}}}
 
     #Let's add these to the model.
-    model.add_property(area)
     model.add_property(porosity)
-    model.add_property(sw)
+    model.add_property(density_calcite)
+    model.add_property(density_bone_fluid)
 
     #Some Model container magic! We add all these properties to the regions.
     model.add_defined_properties_to_regions()
@@ -104,14 +101,17 @@ We can now perform an operation on these values by accessing the values directly
 
 .. code-block:: python
 
+    import matplotlib.pyplot as plot
+    densities = []
     for region_name, region in model.regions.iteritems():
         porosity = region.properties["Porosity"].values
         rho_calc = region.properties["Rho_Calc"].values
         rho_bone_fluid = region.properties["Rho_Fluid"].values
         ensemble_density = rho_calc*(1-porosity)+rho_bone_fluid*porosity
+        densities.append(ensemble_density)
 
-        #And we can plot these values of course for our example.
-        plot.hist(ensemble_density, bins=50)
+    total_density = numpy.add(densities[0], densities[1])
+    plot.hist(total_density, bins=500)
     plot.show()
 
 This covers the basic functionality of MontePetro.

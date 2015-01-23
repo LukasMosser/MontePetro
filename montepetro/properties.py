@@ -1,5 +1,6 @@
 import numpy as np
 from montepetro.generators import RandomGenerator
+from montepetro.seed_generators import SeedGenerator
 
 
 class Property(object):
@@ -16,7 +17,7 @@ class Property(object):
 
 
 class RandomProperty(Property):
-    def __init__(self, seed_generator, n=None, random_number_function=None, *args, **kwargs):
+    def __init__(self, seed_generator=SeedGenerator(0), n=None, random_number_function=None, *args, **kwargs):
         Property.__init__(self, *args, **kwargs)
         self.seed = None
         self.update_seed(seed_generator)
