@@ -63,7 +63,7 @@ We define a simple model for the ensemble density of the bone to be:
 
 .. math::
 
-    \rho_{ensemble}= \rho_{Calcite}*(1-\phi)+\rho_{bone \ fluid}*\phi
+    \rho_{ensemble} \ = \ \rho_{Calcite}(1-\phi)+\rho_{bone \ fluid}\phi
 
 The following code goes into detail on how we create the probability distributions and add them to our model.
 
