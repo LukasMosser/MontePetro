@@ -1,6 +1,5 @@
 import numpy as np
 from montepetro.generators import RandomGenerator
-from montepetro.seed_generators import SeedGenerator
 
 
 class Property(object):
@@ -60,6 +59,12 @@ class OriginalOilInPlace(RegionalProperty):
         ooip = area*phi*(1.0-sw)
         return ooip
 
+    def calculate_property_statistics(self):
+        self.p10 = np.percentile(self.values, 10)
+        self.p50 = np.percentile(self.values, 50)
+        self.p90 = np.percentile(self.values, 90)
+        self.mean = np.mean(self.values)
+
     def generate_values(self):
         self.values = self.calculation()
 
@@ -79,6 +84,12 @@ class ModelOriginalOilInPlace(RegionalProperty):
         for a in ooips[1:]:
             sum += a
         return sum
+
+    def calculate_property_statistics(self):
+        self.p10 = np.percentile(self.values, 10)
+        self.p50 = np.percentile(self.values, 50)
+        self.p90 = np.percentile(self.values, 90)
+        self.mean = np.mean(self.values)
 
     def generate_values(self):
         self.values = self.calculation()
