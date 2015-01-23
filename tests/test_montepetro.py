@@ -9,6 +9,7 @@ from tests.test_utils import MockProperty, mock_random_seed_function, MockSeedGe
 
 from montepetro.generators import RandomGenerator
 from montepetro.properties import Property, RandomProperty, RegionalProperty
+from montepetro.properties import ModelOriginalOilInPlace, OriginalOilInPlace
 from montepetro.json_parser import JSONParser
 from montepetro.regions import Region
 from montepetro.seed_generators import SeedGenerator
@@ -19,6 +20,7 @@ class TestRandomGenerators(unittest.TestCase):
     def setUp(self):
         self.N = 10
         self.seed = 666
+        self.value = 1.0
 
     def test_random_generator(self):
         # mock the random number function to test trivial behavior
@@ -27,8 +29,8 @@ class TestRandomGenerators(unittest.TestCase):
         self.assertEqual(gen.N, self.N)
         self.assertEqual(gen.seed, self.seed)
 
-        self.assertEqual(gen.get_random_number(), np.array([1.0]))
-        self.assertListEqual(list(gen.get_n_random_numbers()), list(np.ones(self.N)))
+        self.assertEqual(gen.get_random_number(value=self.value), np.array([self.value]))
+        self.assertListEqual(list(gen.get_n_random_numbers(value=self.value)), list(np.ones(self.N)))
 
         # test passing a list of arguments to the random number function
         gen.random_number_function = np.random.uniform
@@ -266,6 +268,61 @@ class TestModel(unittest.TestCase):
         for region_name, region in model.regions.iteritems():
             for property_name, property in region.properties.iteritems():
                 self.assertEqual(len(property.values), 10)
+
+    def tearDown(self):
+        pass
+
+
+class TestOilInPlaceCalculation(unittest.TestCase):
+    def setUp(self):
+        pass
+
+    def test_oil_in_place_calculation(self):
+        seed = 300
+        n = 1
+        model = Model("Simple Model", 666)
+
+        area = RandomProperty(name="Area", n=n, random_number_function=mock_random)
+        porosity = RandomProperty(name="Porosity", n=n, random_number_function=mock_random)
+        sw = RandomProperty(name="Sw", n=n, random_number_function=mock_random)
+
+        config = {"Region A": {"Area": {"value": 2.0},
+                               "Porosity": {"value": 0.5},
+                               "Sw": {"value": 0.1}},
+                  "Region B": {"Area": {"value": 1.0},
+                               "Porosity": {"value": 0.5},
+                               "Sw": {"value": 0.1}}}
+
+        #oil in place region a should be 2.0*0.5*(1-0.1) = 1.0*0.9 = 0.9
+        #oil in place region b should be 1.0*0.5*(1-0.1) = 0.5*0.9 = 0.45
+
+        model.add_property(area)
+        model.add_property(porosity)
+        model.add_property(sw)
+
+        region_a = Region(name="Region A")
+        region_b = Region(name="Region B")
+
+        model.add_region(region_a)
+        model.add_region(region_b)
+
+        model.add_defined_properties_to_regions()
+
+        model.run(config)
+
+        model.add_regional_property("ooip", OriginalOilInPlace)
+        for region_name, region in model.regions.iteritems():
+            if region_name is "Region A":
+                self.assertAlmostEqual(np.sum(region.properties["ooip"].values), n*0.9, 4)
+
+            else:
+                self.assertAlmostEqual(np.sum(region.properties["ooip"].values), n*0.45, 4)
+
+
+        ooip = ModelOriginalOilInPlace(model)
+        ooip.generate_values()
+
+        self.assertAlmostEqual(np.sum(ooip.values), n*(0.9+0.45), 4)
 
     def tearDown(self):
         pass

@@ -4,8 +4,9 @@ from montepetro.regions import Region
 from montepetro.seed_generators import SeedGenerator
 
 
-def mock_random():
-    return 1.0
+def mock_random(*args, **kwargs):
+    value = kwargs.get("value")
+    return value
 
 
 def mock_numerical_function():

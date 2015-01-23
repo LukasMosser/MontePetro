@@ -1,4 +1,5 @@
 import logging
+from copy import deepcopy
 from montepetro.seed_generators import SeedGenerator
 
 
@@ -36,7 +37,8 @@ class Model(object):
         for region_name, region in self.regions.iteritems():
             for property_name, property in self.properties.iteritems():
                 if property_name not in region.properties.keys():
-                    region.add_property(property)
+                    region.add_property(deepcopy(property))
+                    region.properties[property_name].update_seed(self.seed_generator)
 
     def add_regional_property(self, prop_name, prop):
         for region_name, region in self.regions.iteritems():
