@@ -58,7 +58,6 @@ class OriginalOilInPlace(RegionalProperty):
         area = self.region.properties["Area"].values
         sw = self.region.properties["Sw"].values
         ooip = area*phi*(1.0-sw)
-        print phi, area, sw, ooip
         return ooip
 
     def generate_values(self):
