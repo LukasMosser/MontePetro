@@ -243,8 +243,15 @@ class TestModel(unittest.TestCase):
 
         model.add_region(mock_region_b)
         model.add_defined_properties_to_regions()
-        for region_name, region in model.regions.iteritems():
-            self.assertEqual(len(region.properties), 2)
+        for region_name_a, region_a in model.regions.iteritems():
+            for region_name_b, region_b in model.regions.iteritems():
+                for property_name, property in model.properties.iteritems():
+                    self.assertNotEqual(model.properties[property_name], region_a.properties[property_name])
+                    if region_a is not region_b:
+                        self.assertNotEqual(region_a.properties[property_name], region_b.properties[property_name])
+            self.assertEqual(len(region_a.properties), 2)
+
+
 
         #Test runnning a model from a configuration dictionary
         config = {"MockRegionA": {"MockRandomPropertyA": {"low": 100.0, "high": 1000.0},
