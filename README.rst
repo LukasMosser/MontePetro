@@ -7,6 +7,12 @@ Probabilistic Reserve Estimation in Python
     :target: http://travis-ci.org/LukasMosser/MontePetro
 .. image:: https://coveralls.io/repos/LukasMosser/MontePetro/badge.png?branch=master
     :target: https://coveralls.io/r/LukasMosser/MontePetro?branch=master
+.. image:: http://img.shields.io/pypi/dm/montepetro.svg?style=flat
+        :target: https://pypi.python.org/pypi/montepetro/
+.. image:: http://img.shields.io/pypi/v/montepetro.svg?style=flat
+        :target: https://pypi.python.org/pypi/montepetro/
+.. image:: http://img.shields.io/badge/license-MIT-blue.svg?style=flat
+        :target: https://github.com/lmosser/MontePetro/blob/master/LICENSE
 
 This package provides a library to perform basic monte carlo estimation of property distributions in native python.
 The package was originaly intended to estimate oil and gas reserves in multi-regional domains
