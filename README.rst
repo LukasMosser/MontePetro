@@ -67,8 +67,6 @@ RegionalProperties are properties that we want to calculate based on the defined
 For our bone example me way want to estimate the ensemble distribution of the density of the bone.
 We define a simple model for the ensemble density of the bone to be:
 
-
-
     ensemble_density = calcite_density*(1-porosity) + bone_fluid_density * porosity
 
 The following code goes into detail on how we create the probability distributions and add them to our model.
@@ -121,8 +119,41 @@ We can now perform an operation on these values by accessing the values directly
     plot.show()
 
 This covers the basic functionality of MontePetro.
-You can find the above example in the following ipython notebook.
+You can find the above example in the following ipython notebook `here
+<http://nbviewer.ipython.org/gist/LukasMosser/c40fb62427ab0b966dca>`_.
 An application to the estimation of oil and gas reserves using regional properties
 is shown in this following ipython notebook.
+
+Citation
+--------
+
+To cite MontePetro in publications use::
+
+    MontePetro Development Team (2015). MontePetro: Python library for probabilistic reserve estimates
+    URL http://www.github.com/lukasmosser/MontePetro
+
+A BibTeX entry for LaTeX users is::
+
+    @Manual{,
+    title = {MontePetro: Python library for probabilistic reserve estimates},
+    author = {{MontePetro Development Team}},
+    year = {2015},
+    url = {http://www.github.com/lukasmosser/MontePetro},
+    }
+
+Copyright (C) <2015>  <Lukas Mosser>
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 2 of the License, or
+(at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
