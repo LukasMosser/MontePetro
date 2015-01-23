@@ -14,14 +14,14 @@ setup(
     # Versions should comply with PEP440.  For a discussion on single-sourcing
     # the version across setup.py and the project code, see
     # https://packaging.python.org/en/latest/single_source_version.html
-    version='0.3',
+    version='0.3.2',
 
     description='Probabilistic Reserve Estimates in Python',
     long_description=long_description,
 
     # The project's main homepage.
     url='https://github.com/LukasMosser/MontePetro',
-    download_url = 'https://github.com/LukasMosser/MontePetro/tarball/0.3',
+    download_url = 'https://github.com/LukasMosser/MontePetro/tarball/0.3.2',
     # Author details
     author='Lukas Mosser',
     author_email='lukas.mosser@gmail.com',
