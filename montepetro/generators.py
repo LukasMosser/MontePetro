@@ -15,4 +15,4 @@ class RandomGenerator(object):
         return np.array(self.random_number_function(*args, **kwargs))
 
     def get_n_random_numbers(self, *args, **kwargs):
-        return np.array([self.random_number_function(*args, **kwargs) for r in range(self.N)])
+        return self.random_number_function(size=self.N, *args, **kwargs)

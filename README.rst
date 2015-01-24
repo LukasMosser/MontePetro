@@ -122,7 +122,8 @@ This covers the basic functionality of MontePetro.
 You can find the above example in the following ipython notebook `here
 <http://nbviewer.ipython.org/gist/LukasMosser/c40fb62427ab0b966dca>`_.
 An application to the estimation of oil and gas reserves using regional properties
-is shown in this following ipython notebook.
+is shown in this following ipython notebook `here
+<http://nbviewer.ipython.org/gist/LukasMosser/0a1a4fd85c1ae54c0f85>`_
 
 Citation
 --------

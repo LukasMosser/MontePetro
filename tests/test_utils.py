@@ -2,11 +2,12 @@ __author__ = 'lmosser'
 from montepetro.properties import Property, RandomProperty
 from montepetro.regions import Region
 from montepetro.seed_generators import SeedGenerator
+import numpy as np
 
 
-def mock_random(*args, **kwargs):
+def mock_random(size=1, *args, **kwargs):
     value = kwargs.get("value")
-    return value
+    return value*np.ones(size)
 
 
 def mock_numerical_function():
