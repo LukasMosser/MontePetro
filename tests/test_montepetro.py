@@ -4,7 +4,7 @@ import os
 
 import numpy as np
 
-from tests.test_utils import mock_random, mock_numerical_function, MockRegion, MockRandomProperty
+from tests.test_utils import mock_random, MockRegion, MockRandomProperty
 from tests.test_utils import MockProperty, mock_random_seed_function, MockSeedGenerator
 
 from montepetro.generators import RandomGenerator
@@ -14,6 +14,7 @@ from montepetro.json_parser import JSONParser
 from montepetro.regions import Region
 from montepetro.seed_generators import SeedGenerator
 from montepetro.models import Model
+from montepetro.utils import truncated_normal_rvs, constant_value
 
 
 class TestRandomGenerators(unittest.TestCase):
@@ -322,14 +323,40 @@ class TestOilInPlaceCalculation(unittest.TestCase):
             if region_name is "Region A":
                 self.assertAlmostEqual(np.sum(region.properties["ooip"].values), n*0.9, 4)
 
+
             else:
                 self.assertAlmostEqual(np.sum(region.properties["ooip"].values), n*0.45, 4)
+            region.properties["ooip"].calculate_property_statistics()
+            self.assertNotEqual(region.properties["ooip"].p10, None)
+            self.assertNotEqual(region.properties["ooip"].p50, None)
+            self.assertNotEqual(region.properties["ooip"].p90, None)
 
 
         ooip = ModelOriginalOilInPlace(model)
         ooip.generate_values()
 
         self.assertAlmostEqual(np.sum(ooip.values), n*(0.9+0.45), 4)
+        ooip.calculate_property_statistics()
+
+        self.assertNotEqual(ooip.p10, None)
+        self.assertNotEqual(ooip.p50, None)
+        self.assertNotEqual(ooip.p90, None)
+
+    def tearDown(self):
+        pass
+
+class TestUtils(unittest.TestCase):
+    def setUp(self):
+        pass
+
+    def test_truncated_normal_rvs(self):
+        a = truncated_normal_rvs()
+        self.assertNotEqual(a, None)
+        b = truncated_normal_rvs(low=0.0, high=1.0, mean=0.5, std=0.1)
+        self.assertEqual(0<b<1.0, True)
+
+    def test_constant_value(self):
+        self.assertEqual(constant_value(value=1.0), 1.0)
 
     def tearDown(self):
         pass
